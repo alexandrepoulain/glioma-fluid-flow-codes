@@ -15,27 +15,33 @@ def create_brain_mesh(stls, output,
     surfaces.pop(3)
 
     # Define identifying tags for the different regions 
-    tags = {"pial": 1, "tumor": 2, "white": 3, "ventricle": 4}
+    tags = {"pial": 1, "white": 2, "ventricle": 3, "tumor": 4}
+    print(surfaces)
+
+
 
     # Label the different regions
     smap = svmtk.SubdomainMap()
     smap.add("10000", tags["pial"]) 
     smap.add("01000", tags["pial"]) 
     smap.add("10100", tags["white"])
-    smap.add("01010", tags["white"])
-    smap.add("11010", tags["white"])
-    smap.add("10011", tags["ventricle"])
-    smap.add("01011", tags["ventricle"])
-    smap.add("11011", tags["ventricle"])
-    smap.add("01100", tags["tumor"])
+    smap.add("01100", tags["white"])
+    smap.add("11100", tags["white"])
+    smap.add("10110", tags["ventricle"])
+    smap.add("01110", tags["ventricle"])
+    smap.add("11110", tags["ventricle"])
+    smap.add("10001", tags["tumor"])
+    smap.add("01001", tags["tumor"])
+    smap.add("11001", tags["tumor"]) 
+    smap.add("00001", tags["tumor"]) 
 
     # Generate mesh at given resolution
     domain = svmtk.Domain(surfaces, smap)
     domain.create_mesh(resolution)
 
     # Remove ventricles perhaps
-    #if remove_ventricles:
-    #    domain.remove_subdomain(tags["ventricle"])
+    if remove_ventricles:
+        domain.remove_subdomain(tags["ventricle"])
 
     # Save mesh    
     domain.save(output)
@@ -45,7 +51,7 @@ stls = ("lh.pial.stl", "rh.pial.stl",
         "lh.ventricles.stl","lh.tumor-surface.stl")
 
 
-create_brain_mesh(stls, "neil-brain.mesh")
+create_brain_mesh(stls, "neil-brain.mesh",16)
 
 
 
