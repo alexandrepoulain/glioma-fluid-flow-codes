@@ -1,4 +1,5 @@
 import SVMTK as svmtk
+import argparse
 
 def create_brain_mesh(stls, output,
                       resolution=32, remove_ventricles=True):
@@ -50,8 +51,11 @@ stls = ("lh.pial.stl", "rh.pial.stl",
         "lh.white.stl", "rh.white.stl",
         "lh.ventricles.stl","lh.tumor-surface.stl")
 
-
-create_brain_mesh(stls, "neil-brain.mesh",16)
+parser = argparse.ArgumentParser()
+parser.add_argument('--meshfile', type=str)   
+parser.add_argument('--resolution', type=int)   
+Z = parser.parse_args() 
+create_brain_mesh(stls, Z.meshfile,Z.resolution)
 
 
 
